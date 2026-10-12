@@ -243,7 +243,7 @@ def build_prerequisites(index: int) -> dict[str, int | None]:
     }
 
 
-def build_description(category: Category, tier: Tier, name: str) -> str:
+def build_description(category: Category, name: str) -> str:
     benefit_map = {
         Category.NEURAL: "restores cortical signal fidelity and cuts synaptic delay during high-load neural tasks.",
         Category.SENSORY: "sharpens sensory input, stabilizes perception, and improves contextual awareness in noisy environments.",
@@ -252,31 +252,31 @@ def build_description(category: Category, tier: Tier, name: str) -> str:
         Category.CARDIOVASCULAR: "supports circulatory efficiency and maintains reliable flow under prolonged physical demand.",
         Category.DERMAL: "improves barrier resilience and thermal control while reducing irritation and tissue stress.",
     }
-    tier_map = {
-        Tier.SALVAGE: "a reclaimed device intended for emergency fallback and short-term stabilization",
-        Tier.STANDARD: "a dependable field model built for everyday performance",
-        Tier.CLINICAL: "a clinically validated implant engineered for precision and long-term safety",
-        Tier.PRIME: "a premium implant designed for exceptional endurance and adaptive control",
-        Tier.MILSPEC: "a hardened implant optimized for harsh operating environments and physical stress",
-        Tier.PROTOTYPE: "an experimental platform designed for controlled testing and iterative refinement",
+
+    category_label = {
+        Category.NEURAL: "neural implant",
+        Category.SENSORY: "sensory implant",
+        Category.MOTOR: "motor implant",
+        Category.METABOLIC: "metabolic implant",
+        Category.CARDIOVASCULAR: "cardiovascular implant",
+        Category.DERMAL: "dermal implant",
     }
+
     return (
-        f"{name} is {tier_map[tier]} for users who need consistent performance in demanding conditions. "
-        f"It {benefit_map[category]}"
+        f"{name} is a {category_label[category]} designed for users who need reliable performance "
+        f"in demanding conditions. It {benefit_map[category]}"
     )
 
 
 def build_implant(index: int) -> ImplantModel:
     categories = list(Category)
-    tiers = list(Tier)
     category = categories[index % len(categories)]
-    tier = tiers[index % len(tiers)]
     name = IMPLANT_NAMES[category][index % len(IMPLANT_NAMES[category])]
 
     implant = ImplantModel(
         reference=f"REF{index + 1:03d}",
         name=name,
-        description=build_description(category, tier, name),
+        description=build_description(category, name),
         category=category,
         prerequisites=build_prerequisites(index),
     )
